@@ -65,7 +65,6 @@ function startGame() {
     plank = new component(120, 20, "rgb(104,104,104)", 450, height - 20, plankv);    
     pling = new sound("pling.mp3");
     ding = new sound("ding.mp3");
-    // blueGamePiece = new component(75, 75, "blue", 10, 110);
     for(i = 0; i < 5; i++)
     {
         for(j = 0; j < width/30; j++)
@@ -82,7 +81,6 @@ function startGame() {
             }
         }
     }
-    // console.log("block " + blocks.length);
     myGameArea.start();
 
 
@@ -170,22 +168,18 @@ function component(width, height, color, x, y, speed) {
         }
         if(this.y + this.height >= myGameArea.canvas.height)
         {
-            // console.log("enterd");
             this.dy = -ballv;
         }
         else if(this.y <= 0)
         {
             this.dy = ballv;
         }
-        // console.log(dx);
-        // console.log(dy);
         this.x = (this.x + this.dx);
         this.y = (this.y + this.dy);
     }
 
     this.drag = function() {
 
-        // console.log("called");
         this.dx=0;
         this.dy=0;
         if (myGameArea.key && myGameArea.key == 37)
@@ -197,8 +191,6 @@ function component(width, height, color, x, y, speed) {
         {
             this.dx = plankv;
         }
-        // console.log(myGameArea.canvas.width);
-        // console.log(this.x + this.width);
         if(this.x <= 0 && this.dx == -plankv)
             this.x = 0;
         else if(this.x + this.width >= myGameArea.canvas.width && this.dx == plankv)
@@ -211,14 +203,11 @@ function component(width, height, color, x, y, speed) {
 
         if(this.y + this.height >= myGameArea.canvas.height - touchPlank.height)
         {
-            // console.log("sat");
             if(this.x +this.width >= touchPlank.x && this.x <= touchPlank.x + touchPlank.width )
             {
-                // console.log("not sat");
                 this.dy = -ballv;
                 this.y = (this.y + this.dy);
                 ding.play();
-                // console.log(this.y);
                 return false;
             }
             return true;
@@ -241,50 +230,23 @@ function component(width, height, color, x, y, speed) {
             yy = Math.floor((this.y/30))*30;
         prevx = (this.x - this.dx);
         prevy = (this.y - this.dy);
-        // console.log("enter");
-        // console.log("this.x " + this.x);
-        // console.log("xx " + xx);
-        // console.log("this.y " + this.y);
-        // console.log("yy " + yy/30);
-        // if(yy <= 5)
-        //     console.log("arra " + obstacles[yy/30][xx/30]);
         if(yy<=150 && obstacles[yy/30][xx/30] == 1)
         {
             
-            // console.log("xxc " + xx);
-            // console.log("yyc " + yy);
-            // // console.log("x " + this.x/30);
-            // // console.log("y " + this.y/30);
-            // console.log("prevx " + prevx);
-            // console.log("prevy " + prevy);
-            // console.log("this.x " + this.x);
-            // console.log("this.y " + this.y);
             if((this.x <= xx && this.y <= yy) && (this.x + 10 >= xx && this.y + 10 >= yy))
             {
-                this.dx = -ballv;
-                this.dy = -ballv;
-                this.x = (this.x + this.dx);
-                this.y = (this.y + this.dy);
-                obstacles[yy/30][xx/30] = 0;
-                pling.play();
-                score += 5;
-                document.getElementById('score').value = score;
-            }
-            else if((this.x <= xx + 30 && this.y + 10 <= yy + 30) && (this.x + 10 >= xx + 30 && this.y >= yy + 30))
-            {
-                this.dx = ballv;
-                this.dy = -ballv;
-                this.x = (this.x + this.dx);
-                this.y = (this.y + this.dy);
-                obstacles[yy/30][xx/30] = 0;
-                pling.play();
-                score += 5;
-                document.getElementById('score').value = score;
-            }
-            else if((this.x + 10 >= xx && this.y <= yy + 30) && (this.x <= xx && this.y + 10 >= yy + 30))
-            {
-                this.dy = ballv;
-                this.dx = -ballv;
+                if(this.dx == ballv && this.dy == -ballv)
+                {
+                    this.dx = -ballv; 
+                }
+                else if(this.dx == ballv && this.dy == ballv)
+                {
+                    this.dx = -ballv;
+                }
+                else if(this.dx == -ballv && this.dy == ballv)
+                {
+                    this.dy = -ballv;
+                }
                 this.x = (this.x + this.dx);
                 this.y = (this.y + this.dy);
                 obstacles[yy/30][xx/30] = 0;
@@ -294,8 +256,60 @@ function component(width, height, color, x, y, speed) {
             }
             else if((this.x <= xx + 30 && this.y <= yy + 30) && (this.x + 10 >= xx + 30 && this.y + 10 >= yy + 30))
             {
-                this.dy = ballv;
-                this.dx = ballv;
+                if(this.dx == ballv && this.dy == -ballv)
+                {
+                    this.dy = ballv;
+                }
+                else if(this.dx == -ballv && this.dy == -ballv)
+                {
+                    this.dx = ballv;
+                }
+                else if(this.dx == -ballv && this.dy == ballv)
+                {
+                    this.dx = ballv;
+                }
+                this.x = (this.x + this.dx);
+                this.y = (this.y + this.dy);
+                obstacles[yy/30][xx/30] = 0;
+                pling.play();
+                score += 5;
+                document.getElementById('score').value = score;
+            }
+            else if((this.x + 10 >= xx && this.y <= yy + 30) && (this.x <= xx && this.y + 10 >= yy + 30))
+            {
+                if(this.dx == ballv && this.dy == ballv)
+                {
+                    this.dx = -ballv;
+                }
+                else if(this.dx == ballv && this.dy == -ballv)
+                {
+                    this.dx = -ballv;
+                }
+                else if(this.dx == -ballv && this.dy == -ballv)
+                {
+                    this.dy = ballv;
+                }
+                this.x = (this.x + this.dx);
+                this.y = (this.y + this.dy);
+                obstacles[yy/30][xx/30] = 0;
+                pling.play();
+                score += 5;
+                document.getElementById('score').value = score;
+            }
+            else if((this.x <= xx + 30 && this.y <= yy) && (this.x + 10 >= xx + 30 && this.y + 10 >= yy))
+            {
+                if(this.dx == ballv && this.dy == ballv)
+                {
+                    this.dy = -ballv;
+                }
+                else if(this.dx == -ballv && this.dy == ballv)
+                {
+                    this.dx = ballv;
+                }
+                else if(this.dx == -ballv && this.dy == -ballv)
+                {
+                    this.dy = ballv;
+                }
                 this.x = (this.x + this.dx);
                 this.y = (this.y + this.dy);
                 obstacles[yy/30][xx/30] = 0;
@@ -307,7 +321,6 @@ function component(width, height, color, x, y, speed) {
             {
                 if((prevx <= xx && prevx + 10 >= xx) && (prevy <= yy + 30 && prevy + 10 >= yy))
                 {
-                    // console.log("enter 1");
                     if(this.dx == ballv)
                     {
                         this.dx = -ballv;
@@ -324,7 +337,6 @@ function component(width, height, color, x, y, speed) {
                 }
                 else if((prevx <= xx + 30 && prevx + 10 >= xx) && (prevy <= yy + 30 && prevy + 10 >= yy))
                 {
-                    // console.log("enter 2");
                     if(this.dx == ballv)
                     {
                         this.dx = -ballv;
@@ -341,7 +353,6 @@ function component(width, height, color, x, y, speed) {
                 }
                 else if((prevy <= yy && prevy + 10 >= yy) && (prevx <= xx + 30 && prevx + 10 >= xx) )
                 {
-                    // console.log("enter 3");
                     if(this.dy == ballv)
                     {
                         this.dy = -ballv;
@@ -358,8 +369,6 @@ function component(width, height, color, x, y, speed) {
                 }
                 else if ((prevy <= yy + 30 && prevy + 10 >= yy) && (prevx <= xx + 30 && prevx + 10 >= xx))
                 {
-                    // console.log("enter 4");
-                    // console.log("dy bef " + this.dy);
                     if(this.dy == ballv)
                     {
 
@@ -367,10 +376,8 @@ function component(width, height, color, x, y, speed) {
                     }
                     else if(this.dy == -ballv)
                     {
-                        // console.log("enenene");
                         this.dy = ballv;
                     }
-                    // console.log("dy af " + this.dy);
                     this.y = this.y + this.dy;
                     obstacles[yy/30][xx/30] = 0;
                     pling.play();
@@ -385,7 +392,6 @@ function component(width, height, color, x, y, speed) {
 function updateGameArea() {
 
     if(ball.notTouch(plank)) {
-        // console.log("happe");
         myGameArea.stop();
     }
     else
@@ -397,7 +403,6 @@ function updateGameArea() {
         {
             myGameArea.stop();
         }
-        // console.log("bing bing");
         for(i = 0; i < 5; i++)
         {
             for(j = 0; j < width/30; j++)
@@ -407,21 +412,11 @@ function updateGameArea() {
                     blocks[i][j].update();
 
                 }
-                // else
-                // {
-                //     console.log("x " + i);
-                //     console.log("y " + j);
-                // }
-                
             }
         }
         ball.move();
         plank.update(); 
         plank.drag();  
-        
-        
-        // yellowGamePiece.move();     
-        // blueGamePiece.update();
     }
 }
 
